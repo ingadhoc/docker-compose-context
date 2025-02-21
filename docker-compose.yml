@@ -1,0 +1,102 @@
+services:
+  traefik:
+    container_name: traefik
+    # image: traefik:v1.7.33-alpine
+    # image: traefik:3
+    image: traefik:v2.10.1
+    command:
+        - "--log.level=DEBUG"
+        - "--api.insecure=true"
+        - "--providers.docker=true"
+        - "--providers.docker.exposedbydefault=false"
+        - "--entrypoints.web.address=:80"
+#        - "--entrypoints.tcp.address=:5432"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    labels:
+        - traefik.enable=true
+        - traefik.port=8080
+        - traefik.frontend.rule=Host:traefik.localhost
+        - traefik.http.routers.myservice.rule=Host(`traefik.localhost`)
+        - traefik.http.services.myservice.loadbalancer.server.port=8080
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+    # para que funcione la solución *.localhost
+    # network_mode: "host"
+    networks:
+      adhoc:
+        ipv4_address: 172.60.0.11
+  db:
+    container_name: db
+    image: postgres:16
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_DB=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - pg_data:/var/lib/postgresql/data/pgdata
+    networks:
+      adhoc:
+        ipv4_address: 172.60.0.4
+  # db-next:
+  #   container_name: db-next
+  #   image: postgres:16
+  #   ports:
+  #     - 5432:5432
+  #   restart: unless-stopped
+  #   environment:
+  #     - POSTGRES_USER=odoo
+  #     - POSTGRES_PASSWORD=odoo
+  #     - POSTGRES_DB=postgres
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #   volumes:
+  #     - pg_data_next:/var/lib/postgresql/data/pgdata
+  #   networks:
+  #     adhoc:
+  #       ipv4_address: 172.60.0.5
+
+  aeroo:
+    container_name: aeroo
+    image: adhoc/aeroo-docs:9.5
+    restart: on-failure
+    networks:
+      adhoc:
+        ipv4_address: 172.60.0.3
+
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:latest
+    restart: on-failure
+    # ports:
+    #   - 1025:1025
+    #   - 8025:8025
+    networks:
+      adhoc:
+        ipv4_address: 172.60.0.2
+
+  dns:
+    container_name: dns
+    image: cytopia/bind:alpine-0.30
+    environment:
+      DNS_A: "*.odoo.localhost=172.60.0.11"
+      DNS_FORWARDER: 127.0.0.11,8.8.8.8,8.8.4.4
+    networks:
+      adhoc:
+        ipv4_address: 172.60.0.10
+volumes:
+  pg_data:
+  pg_data_next:
+
+networks:
+  adhoc:
+    external: true
+  minikube:
+    name: minikube
+    external: true
