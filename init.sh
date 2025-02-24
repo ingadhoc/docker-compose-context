@@ -16,5 +16,4 @@ if ! docker network ls --filter name=^minikube$ --format "{{.Name}}" | grep -wq 
     minikube
 fi
 
-
 docker compose up -d

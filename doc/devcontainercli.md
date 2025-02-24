@@ -4,6 +4,10 @@
 
 ## Install
 
+```txt
+Dev Containers: Install devcontainer CLI
+```
+
 ![install from vscode](img/devcontainercli_install.png "Install")
 ![update path](img/devcontainercli_2_path.png "Path")
 
