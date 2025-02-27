@@ -84,6 +84,7 @@ services:
   dns:
     container_name: dns
     image: cytopia/bind:alpine-0.30
+    restart: on-failure
     environment:
       DNS_A: "*.odoo.localhost=172.60.0.11"
       DNS_FORWARDER: 127.0.0.11,8.8.8.8,8.8.4.4
