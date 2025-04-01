@@ -86,7 +86,7 @@ services:
     image: cytopia/bind:alpine-0.30
     restart: unless-stopped
     environment:
-      DNS_A: "*.odoo.localhost=172.60.0.11"
+      DNS_A: "*.odoo.localhost=172.60.0.11,*.adhoc.devops=${MINIKUBE_IP},*.cluster.local=${MINIKUBE_IP}"
       DNS_FORWARDER: 127.0.0.11,8.8.8.8,8.8.4.4
     networks:
       adhoc:
