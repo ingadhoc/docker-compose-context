@@ -13,6 +13,7 @@ if ! docker network ls --filter name=^minikube$ --format "{{.Name}}" | grep -wq 
     -o "com.docker.network.driver.mtu"="1500" \
     --subnet=192.168.49.0/24 \
     --gateway=192.168.49.1 \
+    --ip-range=192.168.49.128/25 \
     minikube
 fi
 
