@@ -74,9 +74,9 @@ services:
     container_name: mailhog
     image: mailhog/mailhog:latest
     restart: on-failure
-    # ports:
+    ports:
+      - 8025:8025
     #   - 1025:1025
-    #   - 8025:8025
     networks:
       adhoc:
         ipv4_address: 172.60.0.2
