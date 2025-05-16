@@ -17,6 +17,7 @@ if ! docker network ls --filter name=^minikube$ --format "{{.Name}}" | grep -wq 
     minikube
 fi
 
-sudo setfacl -R -d -m u:$USER:rw-x /var/lib/docker/volumes/
+sudo setfacl -R -m u:$USER:rwX /var/lib/docker/volumes
+sudo setfacl -R -d -m u:$USER:rwX /var/lib/docker/volumes
 
 docker compose up -d
