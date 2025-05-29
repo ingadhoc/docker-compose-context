@@ -20,4 +20,9 @@ fi
 sudo setfacl -R -m u:$USER:rwX /var/lib/docker/volumes
 sudo setfacl -R -d -m u:$USER:rwX /var/lib/docker/volumes
 
+# Create a directory for PostgreSQL data
+mkdir -p {pg_data,pg_data_v13,pg_data_v14,pg_data_v15,pg_data_v16}
+sudo chown -R 26:102 pg_data*
+
+# Start Docker Compose services
 docker compose up -d

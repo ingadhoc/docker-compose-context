@@ -29,38 +29,140 @@ services:
     networks:
       adhoc:
         ipv4_address: 172.60.0.11
+
   db:
     container_name: db
-    image: postgres:16
+    image: ghcr.io/cloudnative-pg/postgresql:15-standard-bookworm
     ports:
       - 5432:5432
     restart: unless-stopped
+    command: >
+      bash -c "
+        if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
+          initdb -D /var/lib/postgresql/data/pgdata --username=odoo --pwfile=<(echo odoo);
+        fi &&
+        echo 'host all all 0.0.0.0/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+        echo 'host all all ::/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+        exec postgres -c listen_addresses='*'
+      "
     environment:
       - POSTGRES_USER=odoo
       - POSTGRES_PASSWORD=odoo
       - POSTGRES_DB=postgres
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - pg_data:/var/lib/postgresql/data/pgdata
+      - ./pg_data:/var/lib/postgresql/data/pgdata
     networks:
       adhoc:
         ipv4_address: 172.60.0.4
-  # db-next:
-  #   container_name: db-next
-  #   image: postgres:16
+
+  # # PG para Odoo 13
+  # db13:
+  #   container_name: db13
+  #   image: ghcr.io/cloudnative-pg/postgresql:13
   #   ports:
-  #     - 5432:5432
+  #     - 5413:5432
   #   restart: unless-stopped
+  #   command: >
+  #       bash -c "
+  #         if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
+  #           initdb -D /var/lib/postgresql/data/pgdata --username=odoo --pwfile=<(echo odoo);
+  #         fi &&
+  #         echo 'host all all 0.0.0.0/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         echo 'host all all ::/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         exec postgres -c listen_addresses='*'
+  #       "
   #   environment:
   #     - POSTGRES_USER=odoo
   #     - POSTGRES_PASSWORD=odoo
   #     - POSTGRES_DB=postgres
   #     - PGDATA=/var/lib/postgresql/data/pgdata
   #   volumes:
-  #     - pg_data_next:/var/lib/postgresql/data/pgdata
+  #     - ./pg_data_v13:/var/lib/postgresql/data/pgdata
   #   networks:
   #     adhoc:
-  #       ipv4_address: 172.60.0.5
+  #       ipv4_address: 172.60.0.23
+
+  # PG para Odoo 15 y 16
+  # db14:
+  #   container_name: db14
+  #   image: ghcr.io/cloudnative-pg/postgresql:14
+  #   ports:
+  #     - 5414:5432
+  #   restart: unless-stopped
+  #   command: >
+  #       bash -c "
+  #         if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
+  #           initdb -D /var/lib/postgresql/data/pgdata --username=odoo --pwfile=<(echo odoo);
+  #         fi &&
+  #         echo 'host all all 0.0.0.0/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         echo 'host all all ::/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         exec postgres -c listen_addresses='*'
+  #       "
+  #   environment:
+  #     - POSTGRES_USER=odoo
+  #     - POSTGRES_PASSWORD=odoo
+  #     - POSTGRES_DB=postgres
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #   volumes:
+  #     - ./pg_data_v14:/var/lib/postgresql/data/pgdata
+  #   networks:
+  #     adhoc:
+  #       ipv4_address: 172.60.0.24
+
+  # PG para Odoo 17 y 18
+  # db15:
+  #   container_name: db15
+  #   image: ghcr.io/cloudnative-pg/postgresql:15-standard-bookworm
+  #   ports:
+  #     - 5415:5432
+  #   restart: unless-stopped
+  #   command: >
+  #       bash -c "
+  #         if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
+  #           initdb -D /var/lib/postgresql/data/pgdata --username=odoo --pwfile=<(echo odoo);
+  #         fi &&
+  #         echo 'host all all 0.0.0.0/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         echo 'host all all ::/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         exec postgres -c listen_addresses='*'
+  #       "
+  #   environment:
+  #     - POSTGRES_USER=odoo
+  #     - POSTGRES_PASSWORD=odoo
+  #     - POSTGRES_DB=postgres
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #   volumes:
+  #     - ./pg_data_v15:/var/lib/postgresql/data/pgdata
+  #   networks:
+  #     adhoc:
+  #       ipv4_address: 172.60.0.25
+
+  # # PG para Odoo v19 (version no verificada)
+  # db16:
+  #   container_name: db16
+  #   image: ghcr.io/cloudnative-pg/postgresql:16-standard-bookworm
+  #   ports:
+  #     - 5416:5432
+  #   restart: unless-stopped
+  #   command: >
+  #       bash -c "
+  #         if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
+  #           initdb -D /var/lib/postgresql/data/pgdata --username=odoo --pwfile=<(echo odoo);
+  #         fi &&
+  #         echo 'host all all 0.0.0.0/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         echo 'host all all ::/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         exec postgres -c listen_addresses='*'
+  #       "
+  #   environment:
+  #     - POSTGRES_USER=odoo
+  #     - POSTGRES_PASSWORD=odoo
+  #     - POSTGRES_DB=postgres
+  #     - PGDATA=/var/lib/postgresql/data/pgdata
+  #   volumes:
+  #     - ./pg_data_v16:/var/lib/postgresql/data/pgdata
+  #   networks:
+  #     adhoc:
+  #       ipv4_address: 172.60.0.26
 
   aeroo:
     container_name: aeroo
@@ -91,9 +193,6 @@ services:
     networks:
       adhoc:
         ipv4_address: 172.60.0.10
-volumes:
-  pg_data:
-  pg_data_next:
 
 networks:
   adhoc:
