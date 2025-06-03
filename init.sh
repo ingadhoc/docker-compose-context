@@ -25,4 +25,4 @@ mkdir -p {pg_data,pg_data_v13,pg_data_v14,pg_data_v15,pg_data_v16}
 sudo chown -R 26:102 pg_data*
 
 # Start Docker Compose services
-docker compose up -d
+docker compose up -d --remove-orphans
