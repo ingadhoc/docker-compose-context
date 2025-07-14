@@ -166,7 +166,7 @@ services:
 
   # aeroo:
   #   container_name: aeroo
-  #   image: adhoc/aeroo-docs:9.5
+  #   image: adhoc/aeroo-docs:9.7
   #   restart: on-failure
   #   networks:
   #     adhoc:
