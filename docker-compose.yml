@@ -41,8 +41,8 @@ services:
         if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
           initdb -D /var/lib/postgresql/data/pgdata --username=odoo --pwfile=<(echo odoo);
         fi &&
-        echo 'host all all 0.0.0.0/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
-        echo 'host all all ::/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+        grep -qxF 'host all all 0.0.0.0/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all 0.0.0.0/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+        grep -qxF 'host all all ::/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all ::/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
         exec postgres -c listen_addresses='*'
       "
     environment:
@@ -68,8 +68,8 @@ services:
   #         if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
   #           initdb -D /var/lib/postgresql/data/pgdata --username=odoo --pwfile=<(echo odoo);
   #         fi &&
-  #         echo 'host all all 0.0.0.0/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
-  #         echo 'host all all ::/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         grep -qxF 'host all all 0.0.0.0/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all 0.0.0.0/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         grep -qxF 'host all all ::/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all ::/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
   #         exec postgres -c listen_addresses='*'
   #       "
   #   environment:
@@ -95,8 +95,8 @@ services:
   #         if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
   #           initdb -D /var/lib/postgresql/data/pgdata --username=odoo --pwfile=<(echo odoo);
   #         fi &&
-  #         echo 'host all all 0.0.0.0/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
-  #         echo 'host all all ::/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         grep -qxF 'host all all 0.0.0.0/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all 0.0.0.0/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         grep -qxF 'host all all ::/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all ::/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
   #         exec postgres -c listen_addresses='*'
   #       "
   #   environment:
@@ -122,8 +122,8 @@ services:
   #         if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
   #           initdb -D /var/lib/postgresql/data/pgdata --username=odoo --pwfile=<(echo odoo);
   #         fi &&
-  #         echo 'host all all 0.0.0.0/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
-  #         echo 'host all all ::/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         grep -qxF 'host all all 0.0.0.0/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all 0.0.0.0/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         grep -qxF 'host all all ::/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all ::/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
   #         exec postgres -c listen_addresses='*'
   #       "
   #   environment:
@@ -149,8 +149,8 @@ services:
   #         if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
   #           initdb -D /var/lib/postgresql/data/pgdata --username=odoo --pwfile=<(echo odoo);
   #         fi &&
-  #         echo 'host all all 0.0.0.0/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
-  #         echo 'host all all ::/0 scram-sha-256' >> /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         grep -qxF 'host all all 0.0.0.0/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all 0.0.0.0/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
+  #         grep -qxF 'host all all ::/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all ::/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
   #         exec postgres -c listen_addresses='*'
   #       "
   #   environment:
