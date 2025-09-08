@@ -26,7 +26,12 @@ fi
 
 # Create a directory for PostgreSQL data
 mkdir -p {pg_data,pg_data_v13,pg_data_v14,pg_data_v15,pg_data_v16}
-sudo chown -R 26:102 pg_data*
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sudo chown -R $(id -u):$(id -g) pg_data*
+else
+  sudo chown -R 26:102 pg_data*
+fi
 
 # Start Docker Compose services
 docker compose up -d --remove-orphans
