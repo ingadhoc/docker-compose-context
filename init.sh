@@ -17,8 +17,12 @@ if ! docker network ls --filter name=^minikube$ --format "{{.Name}}" | grep -wq 
     minikube
 fi
 
-sudo setfacl -R -m u:$USER:rwX /var/lib/docker/volumes
-sudo setfacl -R -d -m u:$USER:rwX /var/lib/docker/volumes
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sudo chmod -R 755 /var/lib/docker/volumes 2>/dev/null || true
+else
+  sudo setfacl -R -m u:$USER:rwX /var/lib/docker/volumes
+  sudo setfacl -R -d -m u:$USER:rwX /var/lib/docker/volumes
+fi
 
 # Create a directory for PostgreSQL data
 mkdir -p {pg_data,pg_data_v13,pg_data_v14,pg_data_v15,pg_data_v16}
