@@ -1,9 +1,7 @@
 services:
   traefik:
     container_name: traefik
-    # image: traefik:v1.7.33-alpine
-    # image: traefik:3
-    image: traefik:v2.10.1
+    image: traefik:3.6
     command:
         - "--log.level=DEBUG"
         - "--api.insecure=true"
