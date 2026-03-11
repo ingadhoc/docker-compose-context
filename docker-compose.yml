@@ -162,6 +162,18 @@ services:
   #     adhoc:
   #       ipv4_address: 172.60.0.26
 
+  kwkhtmltopdf:
+    depends_on:
+      - dns
+    container_name: kwkhtmltopdf
+    image: ghcr.io/acsone/kwkhtmltopdf:0.12.6.1-latest
+    restart: on-failure
+    dns:
+      - "172.60.0.10"
+    networks:
+      adhoc:
+        ipv4_address: 172.60.0.5
+
   # aeroo:
   #   container_name: aeroo
   #   image: adhoc/aeroo-docs:9.7
