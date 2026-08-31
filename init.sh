@@ -25,7 +25,7 @@ else
 fi
 
 # Create a directory for PostgreSQL data
-mkdir -p {pg_data,pg_data_v13,pg_data_v14,pg_data_v15,pg_data_v16}
+mkdir -p {pg_data,pg_data_v17}
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   sudo chown -R $(id -u):$(id -g) pg_data*
