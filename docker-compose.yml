@@ -9,7 +9,7 @@ x-pg: &pg
       fi &&
       grep -qxF 'host all all 0.0.0.0/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all 0.0.0.0/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
       grep -qxF 'host all all ::/0 scram-sha-256' /var/lib/postgresql/data/pgdata/pg_hba.conf || echo 'host all all ::/0 scram-sha-256' | tee -a /var/lib/postgresql/data/pgdata/pg_hba.conf &&
-      exec postgres -c listen_addresses='*'
+      exec postgres -c listen_addresses='*' -c jit=off
     "
   environment:
     - POSTGRES_USER=odoo
