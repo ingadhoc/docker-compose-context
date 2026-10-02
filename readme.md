@@ -34,6 +34,12 @@ producción (`saas.database`) es 13/15 → PG 13, 16 → PG 14, 17/18 → PG 15,
 se agrega su service acá y se ajusta el `pg_major_for` del `init.sh` del repo
 de versión.
 
+Las dos instancias arrancan con `jit=off`, igual que los clusters de producción
+(el chart `adhoc-odoo` lo fija así porque el costeo de JIT no es confiable para la
+carga de Odoo). Como lo que se mide en local tiene que parecerse a producción,
+un plan que acá usa JIT no dice nada de lo que pasa en la nube. Para probar con
+JIT en una sesión: `SET jit = on;`.
+
 `db` no lleva profile: es la instancia de siempre y arranca con un
 `docker compose up -d` pelado. `db17` es **opt-in por profile** (`pg17`), así
 quien no trabaja en la 20 no paga un PostgreSQL corriendo al vacío. La levanta el
