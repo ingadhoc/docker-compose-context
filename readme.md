@@ -16,6 +16,36 @@ You can comment some services, just comment them and run
 docker compose up -d --remove-orphans
 ```
 
+## Puertos publicados solo en localhost
+
+La red `adhoc` se crea con `host_binding_ipv4=127.0.0.1`: los puertos que
+publican los compose (PostgreSQL, traefik) escuchan solo en la propia
+máquina, no en todas las redes a las que se conecte la notebook. El flujo
+normal no cambia: los containers se hablan por la red interna y desde el
+host se entra por localhost.
+
+Cubre a los containers que están solo en la red `adhoc`, como todos los de
+este compose. Un container que además está en otra red (por ejemplo la que
+crea su propio compose) puede seguir publicando en todas las interfaces: ese
+caso se cierra en su compose, con `127.0.0.1:<puerto>:<puerto>`.
+
+En una máquina con la red ya creada el flag no se aplica solo: `init.sh`
+avisa y hay que recrearla una vez. Antes de borrarla tienen que estar abajo
+todos los containers que la usan, también `db17` (profile `pg17`) y los
+devcontainers de cada versión:
+
+```sh
+cd ~/odoo/<versión> && docker compose down   # por cada versión levantada
+cd ~/odoo/ctx && docker compose --profile pg17 down
+docker network rm adhoc
+./init.sh
+```
+
+Si `docker network rm` falla con "active endpoints", el mensaje dice qué
+container sigue conectado. Después se vuelve a abrir el devcontainer de cada
+versión como siempre. `db17` no vuelve sola: quien trabaja en la 20 o en
+master la levanta con `docker compose --profile pg17 up -d db17`.
+
 ## PostgreSQL por versión de Odoo
 
 Desde Odoo 20, cada versión corre contra el mismo major de PostgreSQL que usa en

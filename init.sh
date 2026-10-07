@@ -2,7 +2,9 @@
 
 # Create adhoc network if it doesn't exist
 if ! docker network inspect adhoc > /dev/null 2>&1; then
-  docker network create --subnet=172.60.0.0/16 adhoc
+  docker network create --subnet=172.60.0.0/16 -o "com.docker.network.bridge.host_binding_ipv4"="127.0.0.1" adhoc
+elif [[ "$(docker network inspect adhoc --format '{{index .Options "com.docker.network.bridge.host_binding_ipv4"}}')" != "127.0.0.1" ]]; then
+  echo "WARNING: the adhoc network publishes ports on all interfaces. Recreate it as explained in readme.md"
 fi
 
 # Create minikube network if it doesn't exist
